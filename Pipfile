@@ -4,7 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"orion.core" == "0.post336+ga5c730c"
+"numpy" = ">=1.14.5"
+"scipy" = ">=1.1.0"
 
 [dev-packages]
 

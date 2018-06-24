@@ -22,12 +22,13 @@ import numpy as np
 import emcee
 import inspect
 import traceback
-from scipy.stats import norm, kde
-from scipy.optimize import curve_fit, leastsq, fmin_bfgs, fmin_l_bfgs_b, nnls
 import lmfit
 import logging
 from scipy.misc import logsumexp
-from curvefunctions import all_models
+from scipy.stats import norm, kde
+from scipy.optimize import curve_fit, leastsq, fmin_bfgs, fmin_l_bfgs_b, nnls
+
+from .curvefunctions import all_models
 
 def recency_weights(num):
     if num == 1:

@@ -10,6 +10,9 @@
 
 """
 import numpy
+import argparse
+
+from caffe.proto import caffe_pb2
 
 from orion.algo.base import BaseAlgorithm
 
@@ -20,7 +23,7 @@ from .curvemodels import masked_mean_x_greater_than
 class ExtrapolatingLearningCurves(BaseAlgorithm):
     """Implement extrapolating learning curves algorithm."""
 
-    def __init__(self, space, dx_tolerance=1e-7):
+    def __init__(self, space, dx_tolerance=1e-3):
         """Declare `learning_rate` as a hyperparameter of this algorithm."""
         super(ExtrapolatingLearningCurves, self).__init__(space,
                                                dx_tolerance=dx_tolerance,
@@ -71,6 +74,12 @@ class ExtrapolatingLearningCurves(BaseAlgorithm):
         self.current_point = numpy.asarray(points[-1])
         self.has_observed_once = True
 
+    def write_xlim(self, xlim, test_interval=2):
+        solver = caffe_pb2.SolverParameter()
+        solver.max_iter = xlim * test_interval
+        solver.test_interval = test_interval
+        open("caffenet_solver.prototxt", "w").write(str(solver))
+
     @property
     def is_done(self, xlim=500, num_train=200):
         """
@@ -92,7 +101,7 @@ class ExtrapolatingLearningCurves(BaseAlgorithm):
                 y_noisy = y + noise
                 y_final = y_noisy[-1]
                 np.savetxt("./learning_curve.txt", y_noisy[:200])
-                write_xlim(xlim)
+                self.write_xlim(xlim)
 
                 print("Actual ybest: %f" % y_noisy[-1])
 
@@ -102,11 +111,6 @@ class ExtrapolatingLearningCurves(BaseAlgorithm):
                 open("./ybest.txt", "w").write(str(y_final + 0.05))
                 open("./termination_criterion_running", "w").write("running")
 
-                ret = main(mode="conservative",
-                    prob_x_greater_type=prob_x_greater_type,
-                    nthreads=4)
-
-                self.assertTrue(os.path.exists("./y_predict.txt"))
                 y_predict = float(open("./y_predict.txt").read())
                 abserr = np.abs(y_predict - y_noisy[-1])
                 print("abs error %f" % abserr)
@@ -116,9 +120,5 @@ class ExtrapolatingLearningCurves(BaseAlgorithm):
                 # TODO: adjust this to send to database instead
                 open("./ybest.txt", "w").write(str(y_final - 0.05))
                 open("./termination_criterion_running", "w").write("running")
-
-                ret = main(mode="conservative",
-                    prob_x_greater_type=prob_x_greater_type,
-                    nthreads=4)
-        
-        return ret == 0
+ 
+        return abserr < dx_tolerance
