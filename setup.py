@@ -4,19 +4,26 @@
 from setuptools import setup
 
 setup_args = dict(
-    name='orion.algo.gradient_descent',
+    name = "orion.algo.extrapol",
+    version = "0.1",
+    author = "Tobias Domhan, Dendi Suhubdy",
+    author_email = "tdomhan@gmail.com, suhubdyd@iro.umontreal.ca",
+    install_requires = ['numpy', 'docutils>=0.3', 'setuptools', 'matplotlib'],
+    description = ("Predicting learning curves in python"),
+    keywords = "python learning curves, prediction",
+    url = "http://packages.python.org/orion.algo.extrapol",
+    long_description="",
+    name='orion.algo.extrapol',
     version=0.1,
-    description="Implement a gradient descent algorithm, for demo and testing.",
+    description="Implement extrapolating learning curves",
     license='BSD-3-Clause',
-    author='Christos Tsirigotis',
-    author_email='tsirif@gmail.com',
-    url='https://github.com/mila-udem/orion',
+    url='https://github.com/dendisuhubdy/orion.algo.extrapol',
     packages=['orion.algo'],
     package_dir={'': 'src'},
     include_package_data=True,
     entry_points={
         'OptimizationAlgorithm': [
-            'gradient_descent = orion.algo.gradient_descent:Gradient_Descent'
+            'extrapol = orion.algo.extrapol:ExtrapolatingLearningCurves'
             ],
         },
     install_requires=['orion.core'],
@@ -36,7 +43,7 @@ setup_args['keywords'] = [
 setup_args['platforms'] = ['Linux']
 
 setup_args['classifiers'] = [
-    'Development Status :: 1 - Planning',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'Intended Audience :: Education',
     'Intended Audience :: Science/Research',
@@ -47,7 +54,7 @@ setup_args['classifiers'] = [
     'Topic :: Scientific/Engineering',
     'Topic :: Scientific/Engineering :: Artificial Intelligence',
 ] + [('Programming Language :: Python :: %s' % x)
-     for x in '3 3.4 3.5 3.6'.split()]
+     for x in '3.6'.split()]
 
 if __name__ == '__main__':
     setup(**setup_args)

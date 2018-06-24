@@ -16,4 +16,4 @@ the first part of a learning curve to its remainder. Preliminary results indicat
 predictions can be quite accurate and enable the early termination of poor runs.
 
 Copyright by Tobias Domhan, Jost Tobias Springenberg, and Frank Hutter, 2014
-Copyright by the Orion Core team, 2018
+Copyright by Dendi Suhubdy, 2018

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-:mod:`orion.algo.gradient_descent` -- Perform gradient descent on a loss surface
+:mod:`orion.algo.extrapol` -- Perform extrapolation of learning curves
 ================================================================================
 
-.. module:: gradient_descent
+.. module:: extrapol
    :platform: Unix
-   :synopsis: Use gradients to locally search for a minimum.
+   :synopsis: Use extrapolation of learning curves to save computational 
+              resources to find the best set of hyperparameters
 
 """
 import numpy
@@ -13,8 +14,8 @@ import numpy
 from orion.algo.base import BaseAlgorithm
 
 
-class Gradient_Descent(BaseAlgorithm):
-    """Implement a gradient descent algorithm."""
+class ExtrapolatingLearningCurves(BaseAlgorithm):
+    """Implement extrapolating learning curves algorithm."""
 
     def __init__(self, space, learning_rate=1., dx_tolerance=1e-7):
         """Declare `learning_rate` as a hyperparameter of this algorithm."""
