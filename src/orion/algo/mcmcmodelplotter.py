@@ -79,7 +79,7 @@ class MCMCCurveModelPlotter(object):
         # Plot some samples onto the data.
         for idx, theta in enumerate(samples[np.random.randint(len(samples), size=nsamples)]):
         #for idx, theta in enumerate(samples):
-            #print theta
+            #print(theta)
             predictive_mu, sigma = self.model.predict_given_theta(x, theta)
 
             if idx == 0:
@@ -157,7 +157,7 @@ class MCMCCurveModelCombinationPlotter(object):
         if labels is None:
             labels = ["w%d" % idx for idx in range(len(self.model.fit_models))]
             #labels = greek_label_mapping(labels)
-            print labels
+            print(labels)
         fig = triangle.corner(
             samples[::thin,-len(self.model.fit_models):])#,
             #labels=labels)
@@ -167,7 +167,7 @@ class MCMCCurveModelCombinationPlotter(object):
         if labels is None:
             labels = ["w%d" % idx for idx in range(len(self.model.fit_models))]
             #labels = greek_label_mapping(labels)
-            print labels
+            print(labels)
         fig = triangle.corner(
             samples[::thin,-len(self.model.fit_models):])#,
             #labels=labels)
@@ -217,7 +217,7 @@ class MCMCCurveModelCombinationPlotter(object):
                     #plot(x_plot, model_prob * sub_model_predictive_mu, color=model_color, alpha=alpha)
                     plot(x_plot, sub_model_predictive_mu, color=model_color, alpha=alpha)
                 except:
-                    print "error with model: ", fit_model.function.__name__
+                    print("error with model: ", fit_model.function.__name__)
 
         if y is not None:
             plot(x, y, color="r", lw=y_plot_lw, alpha=0.8, label="data")
@@ -374,7 +374,7 @@ class CurveModelEnsemblePlotter(EnsemblePlotter):
         if model.name in self.model_colors:
             model_color = self.model_colors[model.name]
         else:
-            print "No color defined for model %s" % model.name
+            print("No color defined for model %s" % model.name)
         #sample curve:
         model_samples = model.get_burned_in_samples()   
         theta_idx = np.random.randint(0, model_samples.shape[0], 1)[0]
@@ -399,7 +399,7 @@ class CurveEnsemblePlotter(EnsemblePlotter):
         if model.name in self.model_colors:
             model_color = self.model_colors[model.name]
         else:
-            print "No color defined for model %s" % model.name
+            print("No color defined for model %s" % model.name)
 
         model_samples = model.get_burned_in_samples()
 

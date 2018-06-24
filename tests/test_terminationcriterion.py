@@ -164,7 +164,7 @@ class Terminationcriterion(unittest.TestCase):
                 np.savetxt("learning_curve.txt", y_noisy[:200])
                 write_xlim(xlim)
 
-                print "Actual ybest: %f" % y_noisy[-1]
+                print("Actual ybest: %f" % y_noisy[-1])
 
                 #we set ybest to be higher than the final value of this curve
                 #hence we DO want the evaluation to stop!
@@ -179,7 +179,7 @@ class Terminationcriterion(unittest.TestCase):
                 self.assertTrue(os.path.exists("y_predict.txt"))
                 y_predict = float(open("y_predict.txt").read())
                 abserr = np.abs(y_predict - y_noisy[-1])
-                print "abs error %f" % abserr
+                print("abs error %f" % abserr)
                 self.assertTrue(abserr < 0.03)
 
                 #we set ybest to be lower than the final value of this curve
@@ -240,7 +240,7 @@ class Terminationcriterion(unittest.TestCase):
                 np.savetxt("learning_curve.txt", y_noisy[:200])
                 write_xlim(xlim)
 
-                print "Actual ybest: %f" % y_noisy[-1]
+                print("Actual ybest: %f" % y_noisy[-1])
 
                 #we set ybest to be higher than the final value of this curve
                 #hence we DO want the evaluation to stop!
@@ -379,7 +379,7 @@ class Terminationcriterion(unittest.TestCase):
                 nthreads=4)
             self.assertEqual(ret, 0)
 
-            print "Actual ybest: %f" % y_noisy[-1]
+            print("Actual ybest: %f" % y_noisy[-1])
 
             #we set ybest to be higher than the final value of this curve
             #BUT because the predictive std is still high we don't want to stop
@@ -435,7 +435,7 @@ class Terminationcriterion(unittest.TestCase):
                 nthreads=4)
             self.assertEqual(ret, 0)
 
-            print "Actual ybest: %f" % y_noisy[-1]
+            print("Actual ybest: %f" % y_noisy[-1])
 
             #we set ybest to be higher than the final value of this curve
             #hence we DO want the evaluation to stop!
@@ -451,7 +451,7 @@ class Terminationcriterion(unittest.TestCase):
             y_predict = float(open("y_predict.txt").read())
             abserr = np.abs(y_predict-y_noisy[-1])
             self.assertTrue(abserr < 0.05)
-            print "abs error %f" % abserr
+            print("abs error %f" % abserr)
 
             #we set ybest to be lower than the final value of this curve
             #hence we DON'T want the evaluation to stop!
@@ -482,7 +482,7 @@ class Terminationcriterion(unittest.TestCase):
             y_predict = float(open("y_predict.txt").read())
             abserr = np.abs(y_predict-y_noisy[-1])
             self.assertTrue(abserr < 0.05)
-            print "abs error %f" % abserr
+            print("abs error %f" % abserr)
 
             self.assertFalse(os.path.exists("termination_criterion_running"))
             self.assertFalse(os.path.exists("termination_criterion_running_pid"))

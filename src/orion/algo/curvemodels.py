@@ -78,8 +78,8 @@ class CurveModel(object):
         self.default_vals = default_vals.copy()
         for param_name in self.function_params:
             if param_name not in default_vals:
-                print "setting function parameter %s to default of 1.0 for function %s" % (param_name,
-                                                                                           self.function.__name__)
+                print("setting function parameter %s to default of 1.0 for function %s" % (param_name,
+                                                                                           self.function.__name__))
                 self.default_vals[param_name] = 1.0
         self.all_param_names = [param for param in self.function_params]
         self.all_param_names.append("sigma")
@@ -263,9 +263,9 @@ class MLCurveModel(CurveModel):
                 logging.warn("best parameters found: " + str(popt))
                 return False
         except Exception as e:
-            print e
+            print(e)
             tb = traceback.format_exc()
-            print tb
+            print(tb)
             return False
 
     def fit_bfgs(self, x, y, weights, start_from_default):
@@ -381,9 +381,9 @@ class MCMCCurveModel(CurveModel):
             else:
                 return False
         except Exception as e:
-            print e
+            print(e)
             tb = traceback.format_exc()
-            print tb
+            print(tb)
             return False
 
     #priors
@@ -688,7 +688,7 @@ class MCMCCurveModelCombination(object):
             self.fit_mcmc(x, y)
             return True
         else:
-            print "fit_ml_individual failed"
+            print("fit_ml_individual failed")
             return False
 
     def y_lim_sanity_check(self, ylim):
@@ -709,11 +709,11 @@ class MCMCCurveModelCombination(object):
             if model.fit(x, y):
                 ylim = model.predict(self.xlim)
                 if not self.y_lim_sanity_check(ylim):
-                    print "ML fit of model %s is out of bound range [0.0, 100.] at xlim." % (model.function.__name__)
+                    print("ML fit of model %s is out of bound range [0.0, 100.] at xlim." % (model.function.__name__))
                     continue
                 params, sigma = model.split_theta_to_array(model.ml_params)
                 if not np.isfinite(self.ln_model_prior(model, params)):
-                    print "ML fit of model %s is not supported by prior." % model.function.__name__
+                    print("ML fit of model %s is not supported by prior." % model.function.__name__)
                     continue
                 self.fit_models.append(model)
                     
@@ -731,7 +731,7 @@ class MCMCCurveModelCombination(object):
             else:
                 if self.initial_model_weight_ml_estimate:
                     model_weights = self.get_ml_model_weights(x, y)
-                    print model_weights
+                    print(model_weights)
                     non_zero_fit_models = []
                     non_zero_weights = []
                     for w, model in zip(model_weights, self.fit_models):
@@ -758,7 +758,7 @@ class MCMCCurveModelCombination(object):
         self.ndim = len(self.ml_params)
         if self.nwalkers < 2*self.ndim:
             self.nwalkers = 2*self.ndim
-            print "warning: increasing number of walkers to 2*ndim=%d" % (self.nwalkers)
+            print("warning: increasing number of walkers to 2*ndim=%d" % (self.nwalkers))
         return True
 
 
@@ -797,11 +797,11 @@ class MCMCCurveModelCombination(object):
                 #    a[i, j] -= 0.1 #constraint the weights!
         a_rank = np.linalg.matrix_rank(a)
         if a_rank != num_models:
-            print "Rank %d not sufficcient for solving the linear system. %d needed at least." % (a_rank, num_models)
+            print("Rank %d not sufficcient for solving the linear system. %d needed at least." % (a_rank, num_models))
         try:
-            print np.linalg.lstsq(a, b)[0]
-            print np.linalg.solve(a, b)
-            print nnls(a, b)[0]
+            print(np.linalg.lstsq(a, b)[0])
+            print(np.linalg.solve(a, b))
+            print(nnls(a, b)[0])
             ##return np.linalg.solve(a, b)
             weights = nnls(a, b)[0]
             #weights = [w if w > 1e-4 else 1e-4 for w in weights]
@@ -944,7 +944,7 @@ class MCMCCurveModelCombination(object):
     def print_probs(self):
         burned_in_chain = self.get_burned_in_samples()
         model_probabilities = burned_in_chain[:,-len(self.fit_models):]
-        print model_probabilities.mean(axis=0)
+        print(model_probabilities.mean(axis=0))
 
     def predict_given_theta(self, x, theta):
         """
@@ -1127,7 +1127,7 @@ class MlCurveMixtureModel(object):
                 for model_weight, model in zip(model_weights, fit_models):
                     logging.debug("%s %f" % (model.function.__name__, model_weight))
             
-            #print model_weights
+            #print(model_weights)
             self.model_weights = model_weights
             self.fit_models = fit_models
             return True
@@ -1179,7 +1179,7 @@ class MCMCCurveMixtureModel(object):
             self.fit_mcmc(x, y)
             return True
         else:
-            print "fit_ml_individual failed"
+            print("fit_ml_individual failed")
             return False
 
     def fit_ml_individual(self, x, y):
@@ -1196,7 +1196,7 @@ class MCMCCurveMixtureModel(object):
                     if np.isfinite(self.ln_model_prior(model, model.ml_params)):
                         self.fit_models.append(model)
                     else:
-                        print "ML fit of model %s is not supported by prior." % model.function.__name__
+                        print("ML fit of model %s is not supported by prior." % model.function.__name__)
             model_weights = [10. for model in self.fit_models]
             if len(self.fit_models) == 0:
                 return False
@@ -1205,7 +1205,7 @@ class MCMCCurveMixtureModel(object):
         all_model_params = []
         for model in self.fit_models:
             all_model_params.extend(model.ml_params)
-        print "model weights: ", model_weights
+        print("model weights: ", model_weights)
         self.ml_params = self.join_theta(all_model_params, model_weights)
         self.ndim = len(self.ml_params)
         return True
@@ -1352,7 +1352,7 @@ class MCMCCurveMixtureModel(object):
     def print_probs(self):
         burned_in_chain = self.get_burned_in_samples()
         model_probabilities = burned_in_chain[:,-len(self.fit_models):]
-        print model_probabilities.mean(axis=0)
+        print(model_probabilities.mean(axis=0))
 
     def predict_given_theta(self, x, theta):
         """

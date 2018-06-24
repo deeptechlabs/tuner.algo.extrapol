@@ -81,7 +81,7 @@ def get_xlim():
     except Exception as e:
         #this may happen if fields are added. However everything else should be parse
         #hence, it's ok to be ignored
-        print "error parsing solver: ", str(e)
+        print("error parsing solver: ", str(e))
     assert solver.max_iter > 0
     assert solver.test_interval > 0
     return solver.max_iter / float(solver.test_interval)
@@ -91,7 +91,7 @@ class TerminationCriterion(object):
     def __init__(self, nthreads, prob_x_greater_type):
         open("helloworld", "w").write("test")
         self.prob_x_greater_type = prob_x_greater_type
-        print "prob_x_greater_type: %s" % prob_x_greater_type
+        print("prob_x_greater_type: %s" % prob_x_greater_type)
         #just make sure there is no y_predict file from previous runs:
         if os.path.exists("y_predict.txt"):
             os.remove("y_predict.txt")
@@ -99,7 +99,7 @@ class TerminationCriterion(object):
                   "mmf", "janoschek", "dr_hill_zero_background", "log_power",
                   "exp4"]
         xlim = get_xlim()
-        print "xlim: %d" % (xlim)
+        print("xlim: %d" % (xlim))
         self.xlim = xlim
         model = setup_model_combination(#create_model(
             #"curve_combination",
@@ -123,12 +123,12 @@ class TerminationCriterion(object):
         if y_predict >= 0. and y_predict <= 1.0:
             with open("y_predict.txt", "w") as y_predict_file:
                 y_predict_file.write(str(y_predict))
-            print "probably only going to reach %f, stopping..." % y_predict
+            print("probably only going to reach %f, stopping..." % y_predict)
             return 1
         else:
             #we did not pass the sanity check.. let's not report this to the optimizer
             #and pretend nothing happened
-            print "didn't pass sanity check with predicted value %f" % y_predict
+            print("didn't pass sanity check with predicted value %f" % y_predict)
             return 0
 
 
@@ -144,7 +144,7 @@ class ConservativeTerminationCriterion(TerminationCriterion):
     def run(self):
         if not os.path.exists("ybest.txt"):
             #no ybest yet... we can't do much
-            print "not ybest yet...exiting"
+            print("not ybest yet...exiting")
             return 0
         ybest = float(open("ybest.txt").read())
         assert os.path.exists("learning_curve.txt"), "no learning_curve.txt ... nothing to do"
@@ -155,7 +155,7 @@ class ConservativeTerminationCriterion(TerminationCriterion):
 
         if y_curr_best > ybest:
             #we already exceeded ybest ... let the other criterions decide when to stop
-            print "Already better than ybest... not evaluating f(y)>f(y_best)"
+            print("Already better than ybest... not evaluating f(y)>f(y_best)")
             return 0
 
         #TODO subtract num_cut from xlim!
@@ -164,7 +164,7 @@ class ConservativeTerminationCriterion(TerminationCriterion):
 
         if not self.model.fit(x, y):
             #failed fitting... not cancelling
-            print "failed fitting the model"
+            print("failed fitting the model")
             return 0
 
         if self.prob_x_greater_type == "posterior_prob_x_greater_than":
@@ -174,26 +174,26 @@ class ConservativeTerminationCriterion(TerminationCriterion):
             prob_gt_ybest_xlast = self.model.posterior_mean_prob_x_greater_than(self.xlim,
                 ybest, thin=PREDICTION_THINNING)
 
-        print "p(y>y_best) = %f" % prob_gt_ybest_xlast
+        print("p(y>y_best) = %f" % prob_gt_ybest_xlast)
 
         if prob_gt_ybest_xlast < IMPROVEMENT_PROB_THRESHOLD:
             if self.predictive_std_threshold is None:
                 return self.predict()
             else:
-                print "predictive_std_threshold set, checking the predictive_std first"
+                print("predictive_std_threshold set, checking the predictive_std first")
                 predictive_std = self.model.predictive_std(self.xlim, thin=PREDICTION_THINNING)
-                print "predictive_std: %f" % predictive_std
+                print("predictive_std: %f" % predictive_std)
 
                 if predictive_std < self.predictive_std_threshold:
-                    print "predicting..."
+                    print("predicting...")
                     return self.predict()
                 else:
-                    print "continue evaluating"
+                    print("continue evaluating")
                     #we are gonna wait before we become more certain about the outcome!
                     return 0
             
         else:
-            print "continue evaluating"
+            print("continue evaluating")
             #we are probably still going to improve
             return 0
 
@@ -217,7 +217,7 @@ class OptimisticTerminationCriterion(TerminationCriterion):
 
     def run(self):
         if not os.path.exists("learning_curve.txt"):
-            print "no learning_curve.txt ... nothing to do"
+            print("no learning_curve.txt ... nothing to do")
             return 0
 
         if os.path.exists("ybest.txt"):
@@ -237,14 +237,14 @@ class OptimisticTerminationCriterion(TerminationCriterion):
             return 0
 
         predictive_std = self.model.predictive_std(self.xlim, thin=PREDICTION_THINNING)
-        print "predictive_std: %f" % predictive_std
+        print("predictive_std: %f" % predictive_std)
 
         if predictive_std < self.predictive_std_threshold:
             #the model is pretty sure about the prediction: stop!
-            print "predictive_std low, predicting and stopping..."
+            print("predictive_std low, predicting and stopping...")
             return self.predict()
         elif ybest is not None:
-            print "predictive_std high, let's check the probably to get higher than the current ybest"
+            print("predictive_std high, let's check the probably to get higher than the current ybest")
             #we're still checking if maybe all the probability is below ybest
             if self.prob_x_greater_type == "posterior_prob_x_greater_than":
                 prob_gt_ybest_xlast = self.model.posterior_prob_x_greater_than(self.xlim,
@@ -253,16 +253,16 @@ class OptimisticTerminationCriterion(TerminationCriterion):
                 prob_gt_ybest_xlast = self.model.posterior_mean_prob_x_greater_than(self.xlim,
                     ybest, thin=PREDICTION_THINNING)
 
-            print "p(y>y_best) = %f" % prob_gt_ybest_xlast
+            print("p(y>y_best) = %f" % prob_gt_ybest_xlast)
 
             if prob_gt_ybest_xlast < IMPROVEMENT_PROB_THRESHOLD:
                 return self.predict()
             else:
-                print "continue evaluating"
+                print("continue evaluating")
                 #we are probably still going to improve
                 return 0
         else:
-            print "neither the predictive_std is low nor is there a ybest ... continue"
+            print("neither the predictive_std is low nor is there a ybest ... continue")
             return 0
 
 
@@ -291,7 +291,7 @@ def main(mode="conservative",
                 predictive_std_threshold=predictive_std_threshold)
             ret = term_crit.run()
         else:
-            print "The mode can either be conservative or optimistic"
+            print("The mode can either be conservative or optimistic")
             ret = 0
     except Exception as e:
         import traceback
@@ -318,6 +318,6 @@ if __name__ == "__main__":
     ret = main(mode=args.mode, prob_x_greater_type=args.prob_x_greater_type,
         nthreads=args.nthreads, predictive_std_threshold=args.predictive_std_threshold)
 
-    print "exiting with status: %d" % ret
+    print("exiting with status: %d" % ret)
     sys.exit(ret)
 

@@ -55,9 +55,9 @@ class CurveModelTest(unittest.TestCase):
 	        std = 0.01
 	        y += std*np.random.randn(y.shape[0])
 	        self.assertTrue(m.fit(x, y))
-	        print "original params vs fit params:"
-	        print params
-	        print m.ml_params
+	        print("original params vs fit params:")
+	        print(params)
+	        print(m.ml_params)
 
 	def test_masked_mean_x_greater_than(self):
 		self.assertAlmostEqual(0.5, masked_mean_x_greater_than([0.1, 0.9], 0.5))
