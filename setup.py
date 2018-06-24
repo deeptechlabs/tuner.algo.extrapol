@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Installation script for `orion.algo.gradient_descent`."""
+import versioneer
+
 from setuptools import setup
 
 with open('README.md') as readme_file:
@@ -14,7 +16,8 @@ with open('requirements_dev.txt', 'r') as f:
 
 setup_args = dict(
     name = "orion.algo.extrapol",
-    version = "0.1",
+    version = versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     author = "Tobias Domhan, Dendi Suhubdy",
     author_email = "tdomhan@gmail.com, suhubdyd@iro.umontreal.ca",
     description = "Predicting learning curves in python",
