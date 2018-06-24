@@ -1,6 +1,8 @@
-# Extrapolating Learning Curves of Deep Neural Networks
+# Speeding up Automatic Hyperparameter Optimization of Deep Neural Networks by Extrapolation of Learning Curves
 
 By Tobias Domhan, Jost Tobias Springenberg, and Frank Hutter, 2014.
+University of Freiburg, Freiburg, Germany
+{domhant,springj,fh}@cs.uni-freiburg.de
 
 Experienced human experts in deep learning commonly rely on a large “bag of tricks” to
 determine model hyperparameters (Bengio, 2012), as well as learning rates for stochastic
@@ -16,4 +18,5 @@ the first part of a learning curve to its remainder. Preliminary results indicat
 predictions can be quite accurate and enable the early termination of poor runs.
 
 Copyright by Tobias Domhan, Jost Tobias Springenberg, and Frank Hutter, 2014
-Copyright by Dendi Suhubdy, 2018
+
+Orion Implementation Copyright by Dendi Suhubdy, 2018
