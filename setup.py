@@ -3,22 +3,25 @@
 """Installation script for `orion.algo.gradient_descent`."""
 from setuptools import setup
 
+with open('README.md') as readme_file:
+    readme = readme_file.read()
+
+with open('requirements.txt', 'r') as f:
+    requirements = [r for r in f.read().splitlines() if '==' in r]
+
+with open('requirements_dev.txt', 'r') as f:
+    test_requirements = [r for r in f.read().splitlines() if '==' in r]
+
 setup_args = dict(
     name = "orion.algo.extrapol",
     version = "0.1",
     author = "Tobias Domhan, Dendi Suhubdy",
     author_email = "tdomhan@gmail.com, suhubdyd@iro.umontreal.ca",
-    install_requires = ['numpy', 'docutils>=0.3', 'setuptools', 'matplotlib'],
-    description = ("Predicting learning curves in python"),
+    description = "Predicting learning curves in python",
     keywords = "python learning curves, prediction",
-    url = "http://packages.python.org/orion.algo.extrapol",
-    long_description="",
-    name='orion.algo.extrapol',
-    version=0.1,
-    description="Implement extrapolating learning curves",
+    long_description=readme,
     license='BSD-3-Clause',
     url='https://github.com/dendisuhubdy/orion.algo.extrapol',
-    packages=['orion.algo'],
     package_dir={'': 'src'},
     include_package_data=True,
     entry_points={
@@ -26,7 +29,7 @@ setup_args = dict(
             'extrapol = orion.algo.extrapol:ExtrapolatingLearningCurves'
             ],
         },
-    install_requires=['orion.core'],
+    install_requires = requirements,
     setup_requires=['setuptools'],
     # "Zipped eggs don't play nicely with namespace packaging"
     # from https://github.com/pypa/sample-namespace-packages

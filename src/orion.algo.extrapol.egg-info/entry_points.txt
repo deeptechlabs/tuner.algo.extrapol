@@ -1,0 +1,3 @@
+[OptimizationAlgorithm]
+extrapol = orion.algo.extrapol:ExtrapolatingLearningCurves
+
